@@ -106,6 +106,25 @@ require("lazy").setup({
         end,
     },
 
+    -- cool startup
+    {
+        "goolord/alpha-nvim",
+        lazy = false, -- load on startup
+        config = function()
+            require("brainfck.plugins.alpha")
+        end,
+    },
+
+    -- Toggle term
+    {
+        "akinsho/toggleterm.nvim",
+        version = "*",
+        config = function()
+            require("brainfck.plugins.toggleterm")
+        end,
+    },
+
+
     -- Theme
     {
         "folke/tokyonight.nvim",
@@ -124,6 +143,9 @@ require("lazy").setup({
     },
 
 })
+
+
+require("brainfck.plugins.alpha")
 
 -- Optional: Additional immediate configs if needed
 -- (already handled via Lazy.nvim config callbacks)
