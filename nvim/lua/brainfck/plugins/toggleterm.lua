@@ -1,15 +1,12 @@
 -- ToggleTerm setup
 require("toggleterm").setup {
     size = 20,
-    open_mapping = [[<leader>t]],
     hide_numbers = true,
-    shade_filetypes = {},
     shade_terminals = true,
     shading_factor = 2,
-    start_in_insert = true,
-    insert_mappings = true,
+    start_in_insert = false,
     persist_size = true,
-    direction = "horizontal", -- can be "vertical", "horizontal", or "float"
+    direction = "horizontal",
     close_on_exit = true,
     float_opts = {
         border = "curved",
@@ -18,10 +15,13 @@ require("toggleterm").setup {
             border = "Normal",
             background = "Normal",
         },
-    }
+    },
 }
 
--- Optional: helper function to toggle terminal
+-- Manual keymap — normal mode only (fixes the lag)
+vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
+
+-- Optional helper function for programmatic toggle
 function _G.toggle_term()
     require("toggleterm.terminal").Terminal:new():toggle()
 end
