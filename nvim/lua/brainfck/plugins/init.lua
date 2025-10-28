@@ -1,10 +1,10 @@
 -- Bootstrap Lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git", "clone", "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git", lazypath
-    })
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git", lazypath
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -12,135 +12,174 @@ vim.opt.rtp:prepend(lazypath)
 -- Plugin setup
 require("lazy").setup({
 
-    -- Essentials
-    { "nvim-lua/plenary.nvim", lazy = false },
+  -- Essentials
+  { "nvim-lua/plenary.nvim", lazy = false },
 
 
-    -- Telescope
-    {
-        "nvim-telescope/telescope.nvim",
-        lazy = false,
-        config = function()
-            require("brainfck.plugins.telescope")
-        end,
+  -- Telescope
+  {
+    "nvim-telescope/telescope.nvim",
+    lazy = false,
+    config = function()
+      require("brainfck.plugins.telescope")
+    end,
+  },
+
+  -- File Explorer
+  {
+    "nvim-tree/nvim-tree.lua",
+    lazy = false,
+    config = function()
+      require("brainfck.plugins.nvimtree")
+    end,
+  },
+
+  -- Treesitter
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    lazy = false,
+    config = function()
+      require("brainfck.plugins.treesitter")
+    end,
+  },
+
+  -- Mason for LSP
+  {
+    "williamboman/mason.nvim",
+    lazy = false,
+    config = function()
+      require("mason").setup()
+    end,
+  },
+
+  -- LSPConfig
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false, -- load immediately
+    config = function()
+      require("brainfck.plugins.lsp")
+    end,
+  },
+
+  -- Autocompletion
+  {
+    "hrsh7th/nvim-cmp",
+    lazy = false,
+    config = function()
+      require("brainfck.plugins.cmp")
+    end,
+  },
+  "hrsh7th/cmp-nvim-lsp",
+  "L3MON4D3/LuaSnip",
+
+
+
+
+
+
+  -- 🎨 Show colors for hex codes / CSS colors
+  {
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup({
+        '*', -- highlight all filetypes
+        css = { rgb_fn = true, hsl_fn = true, names = true, RRGGBBAA = true, css = true },
+        html = { names = true }
+      })
+    end,
+  },
+
+
+
+  -- 🧾 Lualine (status line)
+  {
+    "nvim-lualine/lualine.nvim",
+    config = function()
+      require("lualine").setup({
+        options = {
+          theme = "tokyonight",
+          section_separators = "",
+          component_separators = "",
+        },
+      })
+    end,
+  },
+
+  -- cool startup
+  {
+    "goolord/alpha-nvim",
+    lazy = false, -- load on startup
+    config = function()
+      require("brainfck.plugins.alpha")
+    end,
+  },
+
+  -- Toggle term
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    config = function()
+      require("brainfck.plugins.toggleterm")
+    end,
+  },
+
+
+  -- Trouble
+  {
+    "folke/trouble.nvim",
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>xx",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>xX",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
     },
+  },
 
-    -- File Explorer
-    {
-        "nvim-tree/nvim-tree.lua",
-        lazy = false,
-        config = function()
-            require("brainfck.plugins.nvimtree")
-        end,
-    },
-
-    -- Treesitter
-    {
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        lazy = false,
-        config = function()
-            require("brainfck.plugins.treesitter")
-        end,
-    },
-
-    -- Mason for LSP
-    {
-        "williamboman/mason.nvim",
-        lazy = false,
-        config = function()
-            require("mason").setup()
-        end,
-    },
-
-    -- LSPConfig
-    {
-        "neovim/nvim-lspconfig",
-        lazy = false, -- load immediately
-        config = function()
-            require("brainfck.plugins.lsp")
-        end,
-    },
-
-    -- Autocompletion
-    {
-        "hrsh7th/nvim-cmp",
-        lazy = false,
-        config = function()
-            require("brainfck.plugins.cmp")
-        end,
-    },
-    "hrsh7th/cmp-nvim-lsp",
-    "L3MON4D3/LuaSnip",
-
-
-
-
-
-
-    -- 🎨 Show colors for hex codes / CSS colors
-    {
-        "norcalli/nvim-colorizer.lua",
-        config = function()
-            require("colorizer").setup({
-                '*', -- highlight all filetypes
-                css = { rgb_fn = true, hsl_fn = true, names = true, RRGGBBAA = true, css = true },
-                html = { names = true }
-            })
-        end,
-    },
-
-
-
-    -- 🧾 Lualine (status line)
-    {
-        "nvim-lualine/lualine.nvim",
-        config = function()
-            require("lualine").setup({
-                options = {
-                    theme = "tokyonight",
-                    section_separators = "",
-                    component_separators = "",
-                },
-            })
-        end,
-    },
-
-    -- cool startup
-    {
-        "goolord/alpha-nvim",
-        lazy = false, -- load on startup
-        config = function()
-            require("brainfck.plugins.alpha")
-        end,
-    },
-
-    -- Toggle term
-    {
-        "akinsho/toggleterm.nvim",
-        version = "*",
-        config = function()
-            require("brainfck.plugins.toggleterm")
-        end,
-    },
-
-
-    -- Theme
-    {
-        "folke/tokyonight.nvim",
-        lazy = false,
-        priority = 1000,
-        config = function()
-            require("tokyonight").setup({
-                transparent = true, -- makes background transparent
-                styles = {
-                    sidebars = "transparent",
-                    floats = "transparent",
-                },
-            })
-            vim.cmd.colorscheme("tokyonight")
-        end,
-    },
+  -- Theme
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("tokyonight").setup({
+        transparent = true, -- makes background transparent
+        styles = {
+          sidebars = "transparent",
+          floats = "transparent",
+        },
+      })
+      vim.cmd.colorscheme("tokyonight")
+    end,
+  },
 
 })
 
